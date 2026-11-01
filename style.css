@@ -1,0 +1,92 @@
+/* Dark theme colours, kept in one place so they're easy to change */
+:root {
+  --bg: #0b0f14;
+  --card: #151c25;
+  --text: #f2f5f8;
+  --muted: #9aa7b4;
+  --dlr: #00b2a9;       /* DLR teal */
+  --good: #7ddc8a;
+  --warn: #ffcc4d;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.25;
+}
+
+main {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 16px 16px calc(16px + env(safe-area-inset-bottom));
+  display: grid;
+  gap: 16px;
+}
+
+.card {
+  background: var(--card);
+  border-radius: 20px;
+  padding: 20px;
+}
+
+h1, h2 {
+  margin: 0 0 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--muted);
+  letter-spacing: 0.02em;
+}
+
+/* The headline countdown — the one thing you should see from arm's length */
+.big {
+  margin: 4px 0 16px;
+  font-size: clamp(2.6rem, 13vw, 4rem);
+  font-weight: 800;
+  color: var(--dlr);
+}
+
+.train-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.train-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  font-size: 1.5rem;
+}
+
+.train-list .dest { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.train-list .mins { font-weight: 700; white-space: nowrap; }
+
+.umbrella {
+  margin: 4px 0 16px;
+  font-size: clamp(1.9rem, 9vw, 2.6rem);
+  font-weight: 800;
+}
+.umbrella.yes { color: var(--warn); }
+.umbrella.no  { color: var(--good); }
+
+.temps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  text-align: center;
+}
+.temps .label { display: block; color: var(--muted); font-size: 1rem; }
+.temps .value { display: block; font-size: 2rem; font-weight: 700; }
+
+.status {
+  margin: 14px 0 0;
+  font-size: 0.95rem;
+  color: var(--muted);
+}

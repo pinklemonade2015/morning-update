@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b0f14">
+  <title>Morning Update</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main>
+    <!-- Trains -->
+    <section class="card" aria-labelledby="trains-title">
+      <h1 id="trains-title">DLR · Stratford International</h1>
+      <p class="big" id="next-train">Loading…</p>
+      <ol class="train-list" id="train-list"></ol>
+      <p class="status" id="train-status"></p>
+    </section>
+
+    <!-- Weather -->
+    <section class="card" aria-labelledby="weather-title">
+      <h2 id="weather-title">Weather · Westminster</h2>
+      <p class="umbrella" id="umbrella">Loading…</p>
+      <div class="temps">
+        <div><span class="label">Now</span><span class="value" id="temp-now">–</span></div>
+        <div><span class="label">High</span><span class="value" id="temp-high">–</span></div>
+        <div><span class="label">Low</span><span class="value" id="temp-low">–</span></div>
+      </div>
+      <p class="status" id="weather-status"></p>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
