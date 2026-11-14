@@ -5,6 +5,7 @@
   --text: #f2f5f8;
   --muted: #9aa7b4;
   --dlr: #00b2a9;       /* DLR teal */
+  --se: #4da3ff;        /* Southeastern blue */
   --good: #7ddc8a;
   --warn: #ffcc4d;
 }
@@ -16,26 +17,27 @@ body {
   background: var(--bg);
   color: var(--text);
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  line-height: 1.25;
+  line-height: 1.2;
 }
 
+/* Sized so all three cards fit on one phone screen without scrolling */
 main {
   max-width: 560px;
   margin: 0 auto;
-  padding: 16px 16px calc(16px + env(safe-area-inset-bottom));
+  padding: 12px 12px calc(12px + env(safe-area-inset-bottom));
   display: grid;
-  gap: 16px;
+  gap: 10px;
 }
 
 .card {
   background: var(--card);
-  border-radius: 20px;
-  padding: 20px;
+  border-radius: 18px;
+  padding: 14px 16px;
 }
 
 h1, h2 {
-  margin: 0 0 8px;
-  font-size: 1.1rem;
+  margin: 0 0 4px;
+  font-size: 1rem;
   font-weight: 600;
   color: var(--muted);
   letter-spacing: 0.02em;
@@ -43,10 +45,17 @@ h1, h2 {
 
 /* The headline countdown — the one thing you should see from arm's length */
 .big {
-  margin: 4px 0 16px;
-  font-size: clamp(2.6rem, 13vw, 4rem);
+  margin: 0 0 8px;
+  font-size: clamp(2.2rem, 11vw, 3.2rem);
   font-weight: 800;
   color: var(--dlr);
+}
+
+.sub {
+  margin: 0 0 8px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--se);
 }
 
 .train-list {
@@ -54,7 +63,7 @@ h1, h2 {
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 10px;
+  gap: 6px;
 }
 
 .train-list li {
@@ -62,15 +71,22 @@ h1, h2 {
   justify-content: space-between;
   align-items: baseline;
   gap: 12px;
-  font-size: 1.5rem;
+  font-size: 1.35rem;
 }
 
 .train-list .dest { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .train-list .mins { font-weight: 700; white-space: nowrap; }
 
+/* Southeastern rows: "08:30  arr 08:37 ........ in 12 min" */
+.se .time { font-weight: 800; }
+.se .arr  { color: var(--muted); font-size: 1.05rem; margin-left: 8px; }
+.se .warn { color: var(--warn); }
+
+.empty { color: var(--muted); font-size: 1.15rem; }
+
 .umbrella {
-  margin: 4px 0 16px;
-  font-size: clamp(1.9rem, 9vw, 2.6rem);
+  margin: 2px 0 8px;
+  font-size: clamp(1.6rem, 8vw, 2.2rem);
   font-weight: 800;
 }
 .umbrella.yes { color: var(--warn); }
@@ -82,11 +98,11 @@ h1, h2 {
   gap: 8px;
   text-align: center;
 }
-.temps .label { display: block; color: var(--muted); font-size: 1rem; }
-.temps .value { display: block; font-size: 2rem; font-weight: 700; }
+.temps .label { display: block; color: var(--muted); font-size: 0.9rem; }
+.temps .value { display: block; font-size: 1.7rem; font-weight: 700; }
 
 .status {
-  margin: 14px 0 0;
-  font-size: 0.95rem;
+  margin: 8px 0 0;
+  font-size: 0.85rem;
   color: var(--muted);
 }

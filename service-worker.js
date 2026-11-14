@@ -5,7 +5,7 @@
 // worker ignores those requests completely, so they always go straight to the
 // live service and are never stored.
 
-const CACHE = "morning-update-v3"; // change the number to force an update
+const CACHE = "morning-update-v4"; // change the number to force an update
 const PAGE_FILES = [
   "./",
   "index.html",
