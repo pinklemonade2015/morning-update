@@ -99,6 +99,9 @@ Running data, notifications, lock-screen widgets.
 It must never cache train or weather data: requests to other sites are ignored
 by the worker, and `app.js` fetches them with `cache: "no-store"`.
 Bump the `CACHE` version name when page files change.
+Page files are fetched with `cache: "no-cache"` so the browser always checks GitHub
+for a newer copy. GitHub Pages lets browsers reuse files for 10 minutes; without this,
+an update can load the new `index.html` with the old `app.js` (parts stuck on "Loading…").
 
 ## Known risks / things to watch
 - Stratford International is the end of the line, so TfL predictions there can

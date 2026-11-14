@@ -5,7 +5,7 @@
 // worker ignores those requests completely, so they always go straight to the
 // live service and are never stored.
 
-const CACHE = "morning-update-v4"; // change the number to force an update
+const CACHE = "morning-update-v5"; // change the number to force an update
 const PAGE_FILES = [
   "./",
   "index.html",
@@ -39,8 +39,11 @@ self.addEventListener("fetch", (event) => {
 
   // Our own page files: try the network first so you always get the latest
   // version, and fall back to the saved copy if you're offline.
+  // cache: "no-cache" makes the browser check with GitHub every time instead of
+  // reusing its own copy for up to 10 minutes. Without it, an update could load
+  // the new page with the old app.js, leaving parts stuck on "Loading…".
   event.respondWith(
-    fetch(event.request)
+    fetch(event.request, { cache: "no-cache" })
       .then((response) => {
         const copy = response.clone();
         caches.open(CACHE).then((cache) => cache.put(event.request, copy));
