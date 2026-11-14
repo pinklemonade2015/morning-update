@@ -35,6 +35,10 @@ const MORNING_WINDOW = { start: "0730", end: "0930" }; // Stratford Intl → St 
 const EVENING_WINDOW = { start: "1700", end: "2000" }; // St Pancras → Stratford Intl
 // After the evening window ends, the app looks ahead to the next morning.
 
+// Overall service status (Good service / delays) for both lines, in one request
+const STATUS_URL = "https://api.tfl.gov.uk/Line/dlr,southeastern/Status";
+const STATUS_REFRESH_MS = 2 * 60 * 1000; // every 2 minutes
+
 const WESTBOUND = { from: STRATFORD_INTL_RAIL, to: ST_PANCRAS_RAIL, route: "Stratford Intl → St Pancras" };
 const EASTBOUND = { from: ST_PANCRAS_RAIL, to: STRATFORD_INTL_RAIL, route: "St Pancras → Stratford Intl" };
 
@@ -260,6 +264,39 @@ function renderSoutheastern() {
   }
 }
 
+// ---------- Service status ----------
+// TfL gives each line one or more statuses. Severity 10 means "Good Service";
+// anything else (minor delays, part closure, etc.) is shown as a warning.
+async function loadLineStatus() {
+  try {
+    const res = await fetch(STATUS_URL, { cache: "no-store" });
+    if (!res.ok) throw new Error(`TfL status replied ${res.status}`);
+    const lines = await res.json();
+    for (const line of lines) {
+      const el = $(line.id === "dlr" ? "dlr-line-status" : "se-line-status");
+      if (!el) continue;
+      const problems = line.lineStatuses.filter((s) => s.statusSeverity !== 10);
+      if (problems.length === 0) {
+        el.textContent = "✓ Good service";
+        el.className = "line-status good";
+      } else {
+        const names = [...new Set(problems.map((s) => s.statusSeverityDescription))].join(", ");
+        // TfL's reason often starts with the line name ("DLR: ..."), which we already show
+        const reason = (problems[0].reason || "").replace(/^[^:]{1,30}:\s*/, "").trim();
+        // Avoid "Minor Delays: Minor delays between…" — if the reason already says it, just show the reason
+        const repeats = reason.toLowerCase().startsWith(names.toLowerCase());
+        el.textContent = repeats ? `⚠ ${reason}` : `⚠ ${names}${reason ? ": " + reason : ""}`;
+        el.className = "line-status bad";
+      }
+    }
+  } catch (err) {
+    console.error(err);
+    // If the status can't be loaded, show nothing rather than a possibly wrong "Good service"
+    $("dlr-line-status").textContent = "";
+    $("se-line-status").textContent = "";
+  }
+}
+
 // ---------- Weather ----------
 async function loadWeather() {
   try {
@@ -308,9 +345,11 @@ function start() {
   stop();
   loadTrains();
   loadSoutheastern();
+  loadLineStatus();
   loadWeather();
   timers.push(setInterval(loadTrains, TRAIN_REFRESH_MS));
   timers.push(setInterval(loadSoutheastern, SE_REFRESH_MS));
+  timers.push(setInterval(loadLineStatus, STATUS_REFRESH_MS));
   timers.push(setInterval(loadWeather, WEATHER_REFRESH_MS));
   // Tick the countdowns every second
   timers.push(setInterval(() => { renderTrains(); renderSoutheastern(); }, 1000));

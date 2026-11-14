@@ -33,7 +33,13 @@ Which trains depends on the UK day and time (`chooseSoutheasternPlan` in `app.js
 
 - Shows departure time, arrival time, and "in X min" for trains within 2 hours.
 - These are **timetable** times, labelled as such: no live delays or platforms.
-- A "⚠" appears if TfL flags the journey as disrupted.
+- A "⚠" appears if TfL flags the journey as disrupted (mostly planned works, not live delays).
+
+## Service status lines
+The DLR and Southeastern boxes each show TfL's overall line status under the title:
+"✓ Good service" (green) or "⚠ <reason>" (yellow, cut to 2 lines so the page still fits).
+It says *that* there's a problem and why, not which train is affected.
+If the status can't be loaded, the line is hidden rather than showing a wrong "Good service".
 
 ## Not in V1
 Running data, notifications, lock-screen widgets.
@@ -57,6 +63,7 @@ Running data, notifications, lock-screen widgets.
 | `STRATFORD_INTL_RAIL`, `ST_PANCRAS_RAIL` | `910GSTFODOM`, `910GSTPX` | National Rail stations (TfL ids) |
 | `MORNING_WINDOW`, `EVENING_WINDOW` | `0730–0930`, `1700–2000` | Southeastern time windows |
 | `SE_REFRESH_MS` | 2 min | How often Southeastern times are fetched |
+| `STATUS_URL` / `STATUS_REFRESH_MS` | DLR + Southeastern / 2 min | Line status feed |
 
 ## Data sources (all free, no key needed)
 - **TfL Unified API** — `https://api.tfl.gov.uk/StopPoint/{STOP_ID}/Arrivals`
@@ -73,6 +80,8 @@ Running data, notifications, lock-screen widgets.
   - Works for future dates/times, which the windows need (live boards only cover ~2 hours).
   - Live National Rail data (delays, platforms) needs an API key, which can't be hidden on
     GitHub Pages — it would need a small separate service to hold the key.
+- **TfL Line Status** — `https://api.tfl.gov.uk/Line/dlr,southeastern/Status`
+  - `statusSeverity` 10 = Good Service; anything else is shown as a warning.
 - **Open-Meteo** — `https://api.open-meteo.com/v1/forecast`
   - `current=temperature_2m`, `daily=temperature_2m_max,temperature_2m_min`,
     `hourly=precipitation_probability`, `timezone=Europe/London`, `forecast_days=1`.
@@ -100,6 +109,13 @@ Bump the `CACHE` version name when page files change.
 - From the Claude cloud sandbox, Open-Meteo often replies 429 (daily limit) because the
   sandbox shares an IP address with many users. Verify weather in a normal browser instead.
   TfL works from the sandbox.
+
+## Future ideas (not built yet)
+- **Live Southeastern times per train** (expected time, "Cancelled", platform) using National
+  Rail live data (Rail Data Marketplace / Darwin, or Realtime Trains). Needs a free API key,
+  which must NOT go in this public repo: it would need a small separate service (e.g. a free
+  Cloudflare Worker) to hold the key and pass data on. Live data only covers ~2 hours ahead,
+  so keep timetable times for windows further out. The owner wants to come back to this.
 
 ## Hosting
 - Public GitHub repo, served by GitHub Pages from the `main` branch root.
